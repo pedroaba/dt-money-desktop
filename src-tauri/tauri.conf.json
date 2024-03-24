@@ -7,12 +7,27 @@
     "distDir": "../build"
   },
   "package": {
-    "productName": "dt-money",
+    "productName": "DT Money",
     "version": "0.1.0"
   },
   "tauri": {
     "allowlist": {
-      "all": false
+      "all": false,
+      "path": {
+        "all": true
+      },
+      "fs": {
+        "all": true
+      },
+      "os": {
+        "all": true
+      },
+      "shell": {
+        "all": true
+      },
+      "dialog": {
+        "all": true
+      }
     },
     "bundle": {
       "active": true,
@@ -55,6 +70,7 @@
     },
     "windows": [
       {
+        "label": "main",
         "fullscreen": false,
         "height": 600,
         "resizable": true,
