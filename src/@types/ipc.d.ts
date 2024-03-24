@@ -3,3 +3,17 @@ export interface ResponseMessage {
   message: string
   error: string
 }
+
+type Transaction = {
+  id: string
+  description: string
+  price: number
+  category: string
+  type: 'income' | 'outcome'
+}
+
+export interface ResponseListMessage {
+  success: boolean
+  total: number
+  results: Transaction[]
+}
