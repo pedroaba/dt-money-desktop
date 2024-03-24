@@ -150,3 +150,7 @@
 * {
   font-family: "Roboto Regular", sans-serif;
 }
+
+body {
+  background-color: #202125 !important;
+}
