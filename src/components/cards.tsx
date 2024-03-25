@@ -15,7 +15,7 @@ import {
 
 export function Cards() {
   return (
-    <div className="gap-8 max-w-[1120px] mx-auto grid grid-cols-3 max-xl:sr-only">
+    <div className="xl:gap-8 xl:max-w-[1120px] mx-auto xl:grid xl:grid-cols-3 max-xl:flex max-xl:gap-4 overflow-hidden overflow-x-auto max-sm:max-w-[380px] max-lg:max-w-[480px] max-xl:max-w-[720px]">
       <CardRoot>
         <CardBody>
           <CardHeader>

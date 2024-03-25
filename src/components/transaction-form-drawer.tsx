@@ -10,12 +10,12 @@ import { Button } from '@/components/ui/button'
 import { useTransactionStore } from '@/store/transaction.ts'
 
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogPortal,
-  DialogTrigger,
-} from './ui/dialog'
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerPortal,
+  DrawerTrigger,
+} from './ui/drawer'
 import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form'
 import { Input } from './ui/input'
 
@@ -36,8 +36,8 @@ const formSchema = z.object({
 
 type FormSchema = z.infer<typeof formSchema>
 
-export function TransactionForm() {
-  const [isDialogOpen, setDialogOpen] = useState(false)
+export function TransactionFormDrawer() {
+  const [isDrawerOpen, setDrawerOpen] = useState(false)
   const { makeTransaction, goToPage } = useTransactionStore((state) => ({
     makeTransaction: state.makeTransaction,
     goToPage: state.toPage,
@@ -59,7 +59,7 @@ export function TransactionForm() {
       })
 
       await goToPage(0)
-      return setDialogOpen(false)
+      return setDrawerOpen(false)
     }
 
     toast.error('Erro ao cadastrar', {
@@ -69,9 +69,8 @@ export function TransactionForm() {
   }
 
   return (
-    <Dialog
-      defaultOpen={false}
-      open={isDialogOpen}
+    <Drawer
+      open={isDrawerOpen}
       onOpenChange={(open) => {
         form.reset({
           type: undefined,
@@ -80,21 +79,21 @@ export function TransactionForm() {
           description: '',
         })
 
-        setDialogOpen(open)
+        setDrawerOpen(open)
       }}
     >
-      <DialogTrigger asChild>
+      <DrawerTrigger asChild>
         <Button className="bg-product-green rounded-sm hover:bg-product-green-light transition-colors duration-300">
           Nova Transação
         </Button>
-      </DialogTrigger>
-      <DialogPortal>
-        <DialogContent className="bg-base-800 border-0 ring-0 p-12">
-          <DialogHeader>
+      </DrawerTrigger>
+      <DrawerPortal>
+        <DrawerContent className="bg-base-800 border-0 ring-0 p-12">
+          <DrawerHeader>
             <span className="font-roboto-bold text-base-300 text-2xl">
               Nova Transação
             </span>
-          </DialogHeader>
+          </DrawerHeader>
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleRegisterTransaction)}>
@@ -200,8 +199,8 @@ export function TransactionForm() {
               </Button>
             </form>
           </Form>
-        </DialogContent>
-      </DialogPortal>
-    </Dialog>
+        </DrawerContent>
+      </DrawerPortal>
+    </Drawer>
   )
 }

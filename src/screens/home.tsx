@@ -24,7 +24,7 @@ export function Home() {
     <div className="bg-base-800 h-screen w-screen space-y-8 overflow-x-hidden">
       <div className="space-y-32">
         <Header />
-        <div className="max-md:max-w-[380px] max-lg:max-w-[480px] max-xl:max-w-[720px] xl:max-w-[1120px] mx-auto flex items-center gap-4">
+        <div className="max-sm:max-w-[380px] max-lg:max-w-[480px] max-xl:max-w-[720px] xl:max-w-[1120px] mx-auto flex items-center gap-4">
           <Input placeholder="Busque uma transação" />
 
           <Button
@@ -38,7 +38,7 @@ export function Home() {
         </div>
       </div>
 
-      <Table className="max-md:max-w-[380px] max-lg:max-w-[480px] max-xl:max-w-[720px] xl:max-w-[1120px] mx-auto border-separate border-spacing-y-2">
+      <Table className="max-sm:max-w-[380px] max-lg:max-w-[480px] max-xl:max-w-[720px] xl:max-w-[1120px] mx-auto border-separate border-spacing-y-2">
         <TableBody>
           {transactions.map((row, index) => (
             <TableRow

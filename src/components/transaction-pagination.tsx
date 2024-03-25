@@ -24,7 +24,7 @@ export function TransactionPagination() {
   const isFirstPage = currentPage === 0
 
   return (
-    <div className="flex items-center justify-between max-md:max-w-[380px] max-lg:max-w-[480px] max-xl:max-w-[720px] xl:max-w-[1120px] mx-auto pb-6">
+    <div className="flex items-center justify-between max-sm:max-w-[380px] max-lg:max-w-[480px] max-xl:max-w-[720px] xl:max-w-[1120px] mx-auto pb-6">
       <span className="truncate text-slate-300 w-32 text-sm">
         Total {totalOfTransactions} item(s).
       </span>
