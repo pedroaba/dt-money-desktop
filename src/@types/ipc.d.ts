@@ -17,3 +17,12 @@ export interface ResponseListMessage {
   total: number
   results: Transaction[]
 }
+
+export interface ResponseSummaryMessage {
+  success: boolean
+  total: number
+  outcome: number
+  income: number
+  error: number
+  message: string
+}

@@ -38,10 +38,13 @@ type FormSchema = z.infer<typeof formSchema>
 
 export function TransactionFormDrawer() {
   const [isDrawerOpen, setDrawerOpen] = useState(false)
-  const { makeTransaction, goToPage } = useTransactionStore((state) => ({
-    makeTransaction: state.makeTransaction,
-    goToPage: state.toPage,
-  }))
+  const { makeTransaction, goToPage, loadSummary } = useTransactionStore(
+    (state) => ({
+      makeTransaction: state.makeTransaction,
+      goToPage: state.toPage,
+      loadSummary: state.loadSummary,
+    }),
+  )
   const form = useForm<FormSchema>({ resolver: zodResolver(formSchema) })
 
   async function handleRegisterTransaction(transaction: FormSchema) {
@@ -58,6 +61,7 @@ export function TransactionFormDrawer() {
         description: result.message,
       })
 
+      await loadSummary()
       await goToPage(0)
       return setDrawerOpen(false)
     }

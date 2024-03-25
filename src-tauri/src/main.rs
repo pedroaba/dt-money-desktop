@@ -4,7 +4,7 @@
 mod transaction;
 
 use transaction::setup_database;
-use crate::transaction::{make_transaction, load_transactions};
+use crate::transaction::{make_transaction, load_transactions, load_summary};
 
 fn main() {
   tauri::Builder::default()
@@ -12,7 +12,11 @@ fn main() {
         setup_database();
         Ok(())
       })
-    .invoke_handler(tauri::generate_handler![make_transaction, load_transactions])
+    .invoke_handler(tauri::generate_handler![
+        make_transaction,
+        load_transactions,
+        load_summary
+    ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }

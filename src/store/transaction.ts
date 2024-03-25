@@ -3,7 +3,11 @@ import { toast } from 'sonner'
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
-import { ResponseListMessage, ResponseMessage } from '@/@types/ipc'
+import {
+  ResponseListMessage,
+  ResponseMessage,
+  ResponseSummaryMessage,
+} from '@/@types/ipc'
 
 type Transaction = {
   id: string
@@ -15,12 +19,19 @@ type Transaction = {
   transaction_type?: string | null
 }
 
+type Summary = {
+  income: number
+  outcome: number
+  total: number
+}
+
 type TransactionCreation = Omit<Transaction, 'id'>
 
 interface TransactionState {
   transactions: Transaction[]
   total: number
   currentPage: number
+  summary: Summary
 }
 
 interface TransactionAction {
@@ -28,6 +39,7 @@ interface TransactionAction {
     transaction: TransactionCreation,
   ) => Promise<ResponseMessage>
   loadTransactions: () => Promise<void>
+  loadSummary: () => Promise<void>
   toPage: (page: number) => Promise<void>
 }
 
@@ -39,6 +51,11 @@ export const useTransactionStore = create<
     transactions: [],
     total: 0,
     currentPage: 0,
+    summary: {
+      income: 0,
+      outcome: 0,
+      total: 0,
+    },
 
     // Actions
     makeTransaction: async (transaction: TransactionCreation) => {
@@ -86,6 +103,27 @@ export const useTransactionStore = create<
         state.transactions = result.results
         state.total = result.total
         state.currentPage = page
+      })
+    },
+
+    loadSummary: async () => {
+      const result = await invoke<ResponseSummaryMessage>('load_summary', {})
+
+      if (!result.success) {
+        toast.error('Erro ao carregar', {
+          description:
+            'Houve um erro na hora de carregar o resumo das transações',
+        })
+
+        return
+      }
+
+      return set((state) => {
+        state.summary = {
+          outcome: result.outcome,
+          income: result.income,
+          total: result.total,
+        }
       })
     },
   })),

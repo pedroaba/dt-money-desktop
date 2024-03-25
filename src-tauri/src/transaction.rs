@@ -186,6 +186,81 @@ pub fn load_transactions(page: u16) -> ResponseListTransactions {
     }
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct LoadSummaryResponse {
+    income: f64,
+    outcome: f64,
+    total: f64,
+    message: String,
+    error: Option<String>,
+    success: bool,
+}
+
+#[tauri::command]
+pub fn load_summary() -> LoadSummaryResponse {
+    let state = APP_TRANSACTION_STATE.lock().unwrap();
+
+    let query = "
+        select
+            sum(
+                case when transaction_type = 'outcome' then price * -1 else 0 end
+            ) as outcome,
+            sum(
+                    case when transaction_type = 'income' then price else 0 end
+            ) as income,
+            sum(
+                case when
+                    transaction_type = 'outcome'
+                then
+                    price * -1
+                when
+                    transaction_type = 'income'
+                then
+                    price
+                else
+                    0
+                end
+            ) as total
+        from
+            transactions
+    ".to_string();
+    let mut total: f64 = 0.0;
+    let mut outcome: f64 = 0.0;
+    let mut income: f64 = 0.0;
+    return match state.database_conn.iterate(
+        query.to_string(),
+        |result| {
+            total = result[2].1.and_then(|s| s.parse().ok()).unwrap_or(0.0);
+            income = result[1].1.and_then(|s| s.parse().ok()).unwrap_or(0.0);
+            outcome = result[0].1.and_then(|s| s.parse().ok()).unwrap_or(0.0);
+
+            true
+        }) {
+        Ok(()) => {
+            LoadSummaryResponse {
+                income,
+                outcome,
+                total,
+                success: true,
+                message: "Resumo carregado com sucesso".to_string(),
+                error: None
+            }
+        },
+        Err(op) => {
+            LoadSummaryResponse {
+                income: 0.0,
+                outcome: 0.0,
+                total: 0.0,
+                success: false,
+                message: "Houve um erro ao processar o resumo".to_string(),
+                error: Some(op.to_string()),
+            }
+        }
+    }
+
+
+}
+
 pub fn setup_database() {
     let state = APP_TRANSACTION_STATE.lock().unwrap();
 
