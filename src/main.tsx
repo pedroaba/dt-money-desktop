@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom/client'
 
 import { Toaster as SonnerToaster } from '@/components/ui/sonner.tsx'
 import { Toaster as RadixUiToaster } from '@/components/ui/toaster.tsx'
+import { UpdatesInfo } from '@/components/updates-info.tsx'
 
 import App from './App.tsx'
 
@@ -13,5 +14,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <App />
     <RadixUiToaster />
     <SonnerToaster richColors position="top-right" />
+    <UpdatesInfo />
   </React.StrictMode>,
 )
