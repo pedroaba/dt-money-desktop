@@ -257,8 +257,37 @@ pub fn load_summary() -> LoadSummaryResponse {
             }
         }
     }
+}
 
+#[derive(Serialize, Deserialize)]
+pub struct DeleteResponse {
+    success: bool,
+    message: String,
+    error: Option<String>
+}
 
+#[tauri::command]
+pub fn delete_transaction(transaction_id: String) -> DeleteResponse {
+    let state = APP_TRANSACTION_STATE.lock().unwrap();
+
+    let query = format!("delete from transactions where id = '{}'", transaction_id.to_string());
+
+    return match state.database_conn.execute(query) {
+        Ok(()) => {
+            DeleteResponse {
+                success: true,
+                message: "Sucesso ao deletar a transação".to_string(),
+                error: None
+            }
+        },
+        Err(op) => {
+            DeleteResponse {
+                success: false,
+                message: "Houve um erro ao deletar a transação".to_string(),
+                error: Some(op.to_string())
+            }
+        }
+    }
 }
 
 pub fn setup_database() {

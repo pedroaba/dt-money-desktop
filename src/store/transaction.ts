@@ -41,12 +41,13 @@ interface TransactionAction {
   loadTransactions: () => Promise<void>
   loadSummary: () => Promise<void>
   toPage: (page: number) => Promise<void>
+  deleteTransaction: (transaction: Transaction) => Promise<void>
 }
 
 export const useTransactionStore = create<
   TransactionState & TransactionAction
 >()(
-  immer((set) => ({
+  immer((set, get) => ({
     // States
     transactions: [],
     total: 0,
@@ -125,6 +126,27 @@ export const useTransactionStore = create<
           total: result.total,
         }
       })
+    },
+
+    deleteTransaction: async (transaction: Transaction) => {
+      toast.info('Deletando transação', {
+        description: `Deletando a transação '${transaction.description}'`,
+      })
+
+      const result = await invoke<ResponseMessage>('delete_transaction', {
+        transactionId: transaction.id.toString(),
+      })
+
+      if (!result.success) {
+        toast.error('Erro ao deletar', {
+          description: `Houve um erro na hora de deletar a transação '${transaction.description}' - '${transaction.id}'`,
+        })
+      }
+
+      toast.success('Transação deletada')
+
+      await get().loadTransactions()
+      await get().loadSummary()
     },
   })),
 )

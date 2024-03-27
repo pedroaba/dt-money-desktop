@@ -23,6 +23,6 @@ export interface ResponseSummaryMessage {
   total: number
   outcome: number
   income: number
-  error: number
+  error: string
   message: string
 }
